@@ -10,19 +10,18 @@ function createPromise(position, delay) {
       };
     }, delay);
   });
-  promise.then(result => {
-    alert(result);
-  })
-  .catch(result => {
-    alert(result);
-  });
+  return promise;
 };
+  
+const ok = ({ position, delay }) => {
+  console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
+};
+const no = ({ position, delay }) => {
+    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+  };
    
-
-
-
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  console.log(e);
-  createPromise(1,1);
+//  console.log(e);
+  createPromise(2,1500).then(ok).catch(no);
 })
