@@ -12,8 +12,8 @@ function createPromise(position, delay) {
   });
   promise.then(result => {
     alert(result);
-  });
-  promise.cutch(result => {
+  })
+  .catch(result => {
     alert(result);
   });
 };
