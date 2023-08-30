@@ -1,13 +1,19 @@
-// Описан в документации
 import flatpickr from "flatpickr";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 // Дополнительный импорт стилей
 import "flatpickr/dist/flatpickr.min.css";
+import "notiflix/dist/notiflix-3.2.6.min.css";
+
+
 
 const inputTime = document.querySelector('#datetime-picker');
 const startBtn = document.querySelector('[data-start]');
 startBtn.disabled = true;
 
 const timer = document.querySelector('.timer .value');
+
+//Пожскажите пожалуйста более удобный выбор элементов, 
+//а то я запутался
 const timerDays = document.querySelector('.value[data-days]');
 const timerHours = document.querySelector('.value[data-hours]');
 const timerMinutes = document.querySelector('.value[data-minutes]');
@@ -23,7 +29,7 @@ const options = {
   minuteIncrement: 1,
     onClose(selectedDates) {
         if (selectedDates[0] < Date.now()) {
-            window.alert("Please choose a date in the future");
+            Notify.failure("Please choose a date in the future");
             return;
         }
         startDate = selectedDates[0].getTime();
@@ -67,15 +73,27 @@ const updateTimer = ({ days, hours, minutes, seconds }) => {
 };
 
 const startTimer = () => {
+    diffDate = startDate - Date.now();
+    startBtn.disabled = true;
+    Notify.info(`Start. Time left 
+        ${convertMs(diffDate).days} :
+        ${pad(convertMs(diffDate).hours)} :
+        ${pad(convertMs(diffDate).minutes)} :
+        ${timerSeconds.textContent}`); // как сделать чтобы секунды шли?
+        
+    
     const timerId = setInterval(() => {
-        diffDate = startDate - Date.now();
-         if (diffDate <= 0) {
-             window.alert('Fini');
-             clearInterval(timerId);
-             startBtn.disabled = true;
-             updateTimer(convertMs(0));
-             return;
-         } 
+    diffDate = startDate - Date.now();        
+        if (diffDate <= 0) {
+            Notify.success('Time is over');
+            clearInterval(timerId);
+            updateTimer(convertMs(0));
+            return;
+        };
+        // Почему не работает???
+        // if (convertMs(diffDate).seconds == 60) {
+        //     Notify.warning('Attention! Left less minute');
+        // };
         console.log(diffDate);
         updateTimer(convertMs(diffDate));
     },1000)
