@@ -1,3 +1,7 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// Дополнительный импорт стилей
+import "notiflix/dist/notiflix-3.2.6.min.css";
+
 
 const refs = {
   form: document.querySelector('.form'),
@@ -5,14 +9,18 @@ const refs = {
   inputStep: document.querySelector('input[name=step]'),
   inputAmount: document.querySelector('input[name=amount]'),
 }
-const position = 0;
-refs.inputDelay.setAttribute('step','100');
-refs.inputStep.setAttribute('step','100');
 
 // let delay = inputDelay.value;
 // const step = inputStep.value;
 // const amount = inputAmount.value;
-
+const setAttributes = (el, attrs) => {
+  for (var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+};
+setAttributes(refs.inputDelay, {'step':'100', 'min':'0'});
+setAttributes(refs.inputStep, { 'step': '100', 'min': '0' });
+setAttributes(refs.inputAmount, { 'min': '0' });
 
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
@@ -27,11 +35,17 @@ function createPromise(position, delay) {
   });
 };
   
-const resolvePromise = ({ position, delay }) => {
-  console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
+const resolvePromise = (result) => {
+  if (!result) 
+    return;
+  const { position, delay } = result; 
+  Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
 };
-const rejectPromise = ({ position, delay }) => {
-    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+const rejectPromise = (result) => {
+  if (!result) 
+    return;
+  const { position, delay } = result; 
+    Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
 };
    
 refs.form.addEventListener('submit', (e) => {
@@ -41,22 +55,29 @@ refs.form.addEventListener('submit', (e) => {
     step: +e.target.step.value,
     amount: +e.target.amount.value,
   };
-  makeArrPromise(values);
+  
+  startCreatePromisesHandler(values);
   //console.log(makeArrPromise(values));
 
   console.log(values);
-  
-  //createPromise(2,1500).then(resolvePromise).catch(rejectPromise);
+    //createPromise(2,1500).then(resolvePromise).catch(rejectPromise);
 })
 
-const makeArrPromise = ({ delay, step, amount }) => {
+const startCreatePromisesHandler = ({ delay, step, amount }) => {
   const promises = [];
-  for (let i = 0; i < amount; i+=1) {
-      //promises[i] = createPromise(5, 1000);
-      promises[i] = createPromise(i, delay);
-      delay += step;
+  for (let i = 0; i < amount; i += 1) {
+    //promises[i] = createPromise(5, 1000);
+    //promises[i] = createPromise(i, delay);
+    createPromise(i,delay).then(resolvePromise).catch(rejectPromise);
+    delay += step;   
   };
 
-  console.log(promises);
-  Promise.all(promises).then(resolvePromise).catch(rejectPromise);
+  // console.log(promises);
+  // Promise.allSettled(promises).then((results) => {
+  //   // console.log(results);
+  //   results.forEach((item) => {
+  //     console.log(item.value || item.reason);
+  //     resolvePromise(item.value) || rejectPromise(item.reason);
+  //   })                 
+  // });
 };
