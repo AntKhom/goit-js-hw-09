@@ -68,7 +68,7 @@ const startCreatePromisesHandler = ({ delay, step, amount }) => {
   for (let i = 0; i < amount; i += 1) {
     //promises[i] = createPromise(5, 1000);
     //promises[i] = createPromise(i, delay);
-    createPromise(i,delay).then(resolvePromise).catch(rejectPromise);
+    createPromise(i+1,delay).then(resolvePromise).catch(rejectPromise);
     delay += step;   
   };
 
