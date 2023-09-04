@@ -12,8 +12,6 @@ startBtn.disabled = true;
 
 const timer = document.querySelector('.timer .value');
 
-//Пожскажите пожалуйста более удобный выбор элементов, 
-//а то я запутался
 const timerDays = document.querySelector('.value[data-days]');
 const timerHours = document.querySelector('.value[data-hours]');
 const timerMinutes = document.querySelector('.value[data-minutes]');
@@ -74,6 +72,7 @@ const updateTimer = ({ days, hours, minutes, seconds }) => {
 
 const startTimer = () => {
     diffDate = startDate - Date.now();
+    inputTime.disabled = true;
     startBtn.disabled = true;
     Notify.info(`Start. Time left 
         ${convertMs(diffDate).days} :
@@ -88,6 +87,8 @@ const startTimer = () => {
             Notify.success('Time is over');
             clearInterval(timerId);
             updateTimer(convertMs(0));
+            inputTime.disabled = false;
+            startBtn.disabled = false;
             return;
         };
         // Почему не работает???

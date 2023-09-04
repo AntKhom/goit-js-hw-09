@@ -71,13 +71,4 @@ const startCreatePromisesHandler = ({ delay, step, amount }) => {
     createPromise(i+1,delay).then(resolvePromise).catch(rejectPromise);
     delay += step;   
   };
-
-  // console.log(promises);
-  // Promise.allSettled(promises).then((results) => {
-  //   // console.log(results);
-  //   results.forEach((item) => {
-  //     console.log(item.value || item.reason);
-  //     resolvePromise(item.value) || rejectPromise(item.reason);
-  //   })                 
-  // });
 };
