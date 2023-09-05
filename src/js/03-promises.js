@@ -10,9 +10,7 @@ const refs = {
   inputAmount: document.querySelector('input[name=amount]'),
 }
 
-// let delay = inputDelay.value;
-// const step = inputStep.value;
-// const amount = inputAmount.value;
+
 const setAttributes = (el, attrs) => {
   for (var key in attrs) {
     el.setAttribute(key, attrs[key]);
@@ -57,17 +55,13 @@ refs.form.addEventListener('submit', (e) => {
   };
   
   startCreatePromisesHandler(values);
-  //console.log(makeArrPromise(values));
 
   console.log(values);
-    //createPromise(2,1500).then(resolvePromise).catch(rejectPromise);
 })
 
 const startCreatePromisesHandler = ({ delay, step, amount }) => {
   const promises = [];
   for (let i = 0; i < amount; i += 1) {
-    //promises[i] = createPromise(5, 1000);
-    //promises[i] = createPromise(i, delay);
     createPromise(i+1,delay).then(resolvePromise).catch(rejectPromise);
     delay += step;   
   };
